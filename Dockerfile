@@ -1,15 +1,19 @@
 FROM node:16 as development
 
-WORKDIR /usr/src/app
+# Create app directory, this is in our container/in our image
+WORKDIR /thomas/src/app
 
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install --only=development
+RUN npm install
+# RUN npm ci --only=production
 
-RUN npm install rimraf
-
+# Bundle app source
 COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
+CMD [ "node", "dist/main" ]
